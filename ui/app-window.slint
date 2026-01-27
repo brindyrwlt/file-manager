@@ -1,0 +1,58 @@
+import { Button, VerticalBox, HorizontalBox } from "std-widgets.slint";
+
+export component AppWindow inherits Window {
+    min-width: 400px;
+    min-height: 200px;
+    preferred-width: 800px;
+    preferred-height: 600px;
+    title: "File Manager";
+//    in-out property <int> counter: 42;
+//    callback request-increase-value();
+//    VerticalBox {
+//        Text {
+//            text: "Counter: \{root.counter}";
+//        }
+//
+//        Button {
+//            text: "Increase value";
+//            clicked => {
+//                root.request-increase-value();
+//            }
+//        }
+//    }
+
+    in-out property <[string]> files;
+    HorizontalBox {
+        padding: 0;
+        spacing: 0;
+
+        // Side panel
+        Rectangle {
+            background: black;
+            width: 15%;
+        }
+
+        VerticalBox {
+            padding: 0;
+            spacing: 0;
+
+            // Top panel
+            Rectangle {
+                background: blue;
+                height: 15%;
+            }
+
+//            // Content
+//            Rectangle {
+//                background: white;
+//            }
+            VerticalBox {
+                alignment: start;
+
+                for file in files: Text {
+                    text: file;
+                }
+            }
+        }
+    }
+}

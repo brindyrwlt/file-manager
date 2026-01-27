@@ -1,4 +1,4 @@
-import { Button, VerticalBox, HorizontalBox } from "std-widgets.slint";
+import { Button, VerticalBox, HorizontalBox} from "std-widgets.slint";
 
 export component AppWindow inherits Window {
     min-width: 400px;
@@ -46,11 +46,13 @@ export component AppWindow inherits Window {
 //            Rectangle {
 //                background: white;
 //            }
+            // TODO: Make VerticalBox scrollable, maybe ScrollView ?
             VerticalBox {
                 alignment: start;
 
                 for file in files: Text {
                     text: file;
+                    font-size: 18px;
                 }
             }
         }

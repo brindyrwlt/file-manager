@@ -1,5 +1,16 @@
 import { Button, VerticalBox, HorizontalBox, ScrollView} from "std-widgets.slint";
 
+export enum FileItemType {
+    FILE,
+    DIRECTORY
+}
+
+export struct FileItem {
+    name: string,
+    size: float,
+    fileType: FileItemType
+}
+
 export component AppWindow inherits Window {
     min-width: 400px;
     min-height: 200px;
@@ -21,7 +32,7 @@ export component AppWindow inherits Window {
 //        }
 //    }
 
-    in property <[string]> files;
+    in property <[FileItem]> files;
     in-out property <string> directory : "/home/brindy/";
     callback change-current-directory();
     HorizontalBox {
@@ -70,20 +81,37 @@ export component AppWindow inherits Window {
 //            }
             ScrollView {
                 // TODO: Make a grid instead of VerticalBox
-                VerticalBox {
-                spacing: 10px;
-                    for file in files: Rectangle {
-                        background: white;
-                        height: 40px;
-                        border-radius: 15px;
-                        Text {
-                            text: file;
-                            color: black;
-                            font-size: 18px;
+                GridLayout {
+                    for row in [0, files.length / 5]: Row {
+                        for i in [0, 5] : Rectangle {
+                            background: white;
+                            height: 40px;
+                            border-radius: 15px;
+                            property <FileItem> file: files[(row * 5 + i)];
+                            Text {
+                                text: file.name;
+//                                files[row * 5 + i]
+                                color: black;
+                                font-size: 18px;
+                            }
                         }
-
                     }
                 }
+
+//                VerticalBox {
+//                spacing: 10px;
+//                    for file in files: Rectangle {
+//                        background: white;
+//                        height: 40px;
+//                        border-radius: 15px;
+//                        Text {
+//                            text: file.name;
+//                            color: black;
+//                            font-size: 18px;
+//                        }
+//
+//                    }
+//                }
             }
         }
     }

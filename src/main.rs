@@ -37,13 +37,18 @@ fn get_files(ui: &AppWindow) -> Result<(), Box<dyn Error>> {
     let files_in_dir = read_dir(ui.get_directory()).expect("Can't read into directory");
     // println!("{:?}", files.enumerate());
 
-    let mut files: Vec<SharedString> = vec![];
+    let mut files: Vec<FileItem> = vec![];
     for file in files_in_dir.enumerate() {
         // println!("{:?}", file.1?.file_name());
-        files.push(SharedString::from(file.1?.file_name().into_string().unwrap()));
+        files.push(FileItem {
+            name: SharedString::from(file.1?.file_name().into_string().unwrap()),
+            size: 0.0,
+            fileType: FileItemType::FILE,
+        });
+    //     SharedString::from(file.1?.file_name().into_string().unwrap()), 0, FileItemType::FILE
     }
 
-    let files_vec: Rc<VecModel<SharedString>> = Rc::new(VecModel::from(files));
+    let files_vec: Rc<VecModel<FileItem>> = Rc::new(VecModel::from(files));
     let files= ModelRc::from(files_vec);
 
     ui.set_files(files);

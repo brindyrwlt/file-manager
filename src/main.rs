@@ -19,7 +19,22 @@ fn main() -> Result<(), Box<dyn Error>> {
     //     }
     // });
 
-    let files_in_dir = read_dir("/home/brindy/").expect("Can't read into directory");
+    get_files(&ui);
+
+    ui.on_change_current_directory({
+        let ui_handle = ui.as_weak();
+        move || {
+            get_files(&ui_handle.unwrap());
+        }
+    });
+
+    ui.run()?;
+
+    Ok(())
+}
+
+fn get_files(ui: &AppWindow) -> Result<(), Box<dyn Error>> {
+    let files_in_dir = read_dir(ui.get_directory()).expect("Can't read into directory");
     // println!("{:?}", files.enumerate());
 
     let mut files: Vec<SharedString> = vec![];
@@ -32,8 +47,5 @@ fn main() -> Result<(), Box<dyn Error>> {
     let files= ModelRc::from(files_vec);
 
     ui.set_files(files);
-
-    ui.run()?;
-
     Ok(())
 }

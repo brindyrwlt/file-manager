@@ -1,9 +1,9 @@
-import { Button, VerticalBox, HorizontalBox} from "std-widgets.slint";
+import { Button, VerticalBox, HorizontalBox, ScrollView} from "std-widgets.slint";
 
 export component AppWindow inherits Window {
     min-width: 400px;
     min-height: 200px;
-    preferred-width: 800px;
+    preferred-width: 1100px;
     preferred-height: 600px;
     title: "File Manager";
 //    in-out property <int> counter: 42;
@@ -21,7 +21,9 @@ export component AppWindow inherits Window {
 //        }
 //    }
 
-    in-out property <[string]> files;
+    in property <[string]> files;
+    in-out property <string> directory : "/home/brindy/";
+    callback change-current-directory();
     HorizontalBox {
         padding: 0;
         spacing: 0;
@@ -40,6 +42,17 @@ export component AppWindow inherits Window {
             Rectangle {
                 background: blue;
                 height: 15%;
+                TextInput {
+                    text <=> root.directory;
+                    font-size: 18px;
+                    key-pressed(event) => {
+                        if(event.text == Key.Return) {
+                            root.change-current-directory();
+                            return EventResult.accept;
+                        }
+                        return EventResult.reject;
+                    }
+                }
             }
 
 //            // Content
@@ -47,12 +60,29 @@ export component AppWindow inherits Window {
 //                background: white;
 //            }
             // TODO: Make VerticalBox scrollable, maybe ScrollView ?
-            VerticalBox {
-                alignment: start;
+//            VerticalBox {
+//                alignment: start;
+//
+//                for file in files: Text {
+//                    text: file;
+//                    font-size: 18px;
+//                }
+//            }
+            ScrollView {
+                // TODO: Make a grid instead of VerticalBox
+                VerticalBox {
+                spacing: 10px;
+                    for file in files: Rectangle {
+                        background: white;
+                        height: 40px;
+                        border-radius: 15px;
+                        Text {
+                            text: file;
+                            color: black;
+                            font-size: 18px;
+                        }
 
-                for file in files: Text {
-                    text: file;
-                    font-size: 18px;
+                    }
                 }
             }
         }

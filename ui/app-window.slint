@@ -1,4 +1,4 @@
-import { Button, VerticalBox, HorizontalBox, ScrollView} from "std-widgets.slint";
+import { Button, VerticalBox, HorizontalBox, ScrollView, StandardButton} from "std-widgets.slint";
 
 export enum FileItemType {
     FILE,
@@ -9,6 +9,17 @@ export struct FileItem {
     name: string,
     size: float,
     fileType: FileItemType
+}
+
+export component ErrorDialog inherits Dialog {
+    title: "Error in the provided path";
+    preferred-width: 110px;
+    preferred-height: 60px;
+    
+    Text {
+        text: "This path does not exists. Please try again.";
+    }
+    StandardButton { kind: ok; }
 }
 
 export component AppWindow inherits Window {
@@ -81,21 +92,38 @@ export component AppWindow inherits Window {
 //            }
             ScrollView {
                 // TODO: Make a grid instead of VerticalBox
+                vertical-scrollbar-policy: always-on;
+                horizontal-scrollbar-policy: always-off;
                 GridLayout {
-                    for row in [0, files.length / 5]: Row {
-                        for i in [0, 5] : Rectangle {
-                            background: white;
-                            height: 40px;
-                            border-radius: 15px;
-                            property <FileItem> file: files[(row * 5 + i)];
-                            Text {
-                                text: file.name;
+                    spacing-horizontal: 50px;
+                    spacing-vertical: 25px;
+                    for file[i] in files: Rectangle {
+                        row: i / 6;
+                        border-radius: 15px;
+                        background: white;
+                        height: 100px;
+                        width: 100px;
+                        Text {
+                            text: file.name;
 //                                files[row * 5 + i]
-                                color: black;
-                                font-size: 18px;
-                            }
+                            color: black;
+                            font-size: 18px;
                         }
                     }
+//                    for row in [0, files.length / 5]: Row {
+//                        for i in [0, 5] : Rectangle {
+//                            background: white;
+//                            height: 40px;
+//                            border-radius: 15px;
+//                            property <FileItem> file: files[(row * 5 + i)];
+//                            Text {
+//                                text: file.name;
+////                                files[row * 5 + i]
+//                                color: black;
+//                                font-size: 18px;
+//                            }
+//                        }
+//                    }
                 }
 
 //                VerticalBox {
